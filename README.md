@@ -12,6 +12,8 @@ A modular and flexible software package for performing VR animal experiments in 
 * Right now, this package is Windows only(!) Although Linux/Mac support could be added at a later time.
 * Device and external software communication occurs over the MQTT protocol and Gimbl expects access to a MQTT Broker (local or on the network). We have tested the software with the Eclipse Mosquitto broker which can be downloaded [here](https://mosquitto.org/).
 
+Please check out the [Wiki](https://github.com/winnubstj/Gimbl/wiki) for more detailed info.
+
 
 ## Quick Start.
 This guide takes you through all the basic steps of setting up a VR task for the first time. We will then import a simple infinite corridor task where the animal has to report a fixed location on a 1d track. It will also explain how to simulate a input from a external sensor.
@@ -33,7 +35,7 @@ Actors represent the animal within the VR environment. They can have a linked Co
 
 	<img src="./docs/images/QuickStart/CameraMapping.png" width="300">
 * __Creating a Controller:__ For this example we are going to simulate a linear treadmill that controls the movement of the actor through the VR environment (See the wiki on how to use MQTT to interface your device with a Gimbl controller). Under the Actors window go to the 'Controllers' section and select the 'Create' dropdown menu. Set the type to be 'Simulated Linear Treadmill' and give it a name.
-* __Linking everything together:__ We now have to link the Controller and Display objects to the Actor. In the Actors menu click on the circled dot next to 'Controller' and select your controller from the list. Do the same for the 'Display'.Both the text "Controller" and "Display" should show up as green now.
+* __Linking everything together:__ We now have to link the Controller and Display objects to the Actor. In the Actors menu click on the circled dot next to 'Controller' and select your controller from the list. Do the same for the 'Display' section. Both the text "Controller" and "Display" should show up as green now.
 ### Setting up the task
 * __Import the task assets:__ On the main menu bar go to 'Assets' -> 'Import Package' -> 'Custom Package' and browse to 'examples/tasks/InfiniteCorridorTask.unitypackage'. A window will popup asking you what you want to import, since we want to import everything just click 'Import'. 
 * __Placing the corridor:__ You should now see a new folder in your project view ('Assets/InfiniteCorridorTask'). In it you will see a Unity [prefab](https://docs.unity3d.com/Manual/Prefabs.html) object called InfiniteCorridor. Drag and drop this file onto the [Hierarchy window](https://docs.unity3d.com/Manual/Hierarchy.html). You should now see the corridor.
@@ -46,7 +48,7 @@ Actors represent the animal within the VR environment. They can have a linked Co
 
 ### Try out the task!
 * __Start the task:__ Press the play button on the center top of the unity window to start the task. You can control the 'Mouse' with the 'w' and 's' keys. 
-* __Change the task parameters:__ You can change the task parameters by clicking on the 'InfiniteCorridorTask' object in the hierarchy window (settings will show up in the [Inspector window](https://docs.unity3d.com/Manual/UsingTheInspector.html) on the right). For instance, you can turn of the visible marker that shows the reward location. 
+* __Change the task parameters:__ You can change the task parameters by clicking on the 'InfiniteCorridorTask' object in the hierarchy window (settings will show up in the [Inspector window](https://docs.unity3d.com/Manual/UsingTheInspector.html) on the right). For instance, you can turn off the visible marker that shows the reward location. 
 * __Simulating a sensor device input:__ The other task parameter 'Must Lick' signals that the animal has to actively report the reward location by touching the lickport in order to get a reward. Since all device interactions happen through the MQTT broker we can easily simulate such a response. In the controller window select 'Button Topics' and set size to '1'. In the new line 'Element0' type 'LickPort/' (must be precise spelling). Thats it! Now when you restart the task you can simulate a lick reponse by clicking the left mouse button.
 
 	<img src="./docs/images/QuickStart/SensorInput.png" width="300">
