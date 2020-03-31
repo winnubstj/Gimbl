@@ -1,0 +1,4 @@
+*.lock
+gimbl-package/Resources/Displays/*
+!gimbl-package/Resources/Displays/MyMonitorSetup.prefab
+gimbl-package/Resources/Displays.meta
