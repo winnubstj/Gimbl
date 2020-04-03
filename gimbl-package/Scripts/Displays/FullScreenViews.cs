@@ -397,7 +397,7 @@ namespace Gimbl
                 },
                 0);
             }
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            else
             {
                 // Use xrandr to get size of screen and offset.
                 System.Diagnostics.Process p = new System.Diagnostics.Process();
@@ -417,20 +417,20 @@ namespace Gimbl
                 
             }
 
-            // foreach (Monitor monitor in result)
-            // {
-            //     MonitorTester tester = EditorWindow.CreateInstance<MonitorTester>();
+            foreach (Monitor monitor in result)
+            {
+                MonitorTester tester = EditorWindow.CreateInstance<MonitorTester>();
 
-            //     // These coordinates seem to work, even though they don't have the tricky scaling done when
-            //     // showing a FullScreenView, above.
+                // These coordinates seem to work, even though they don't have the tricky scaling done when
+                // showing a FullScreenView, above.
 
-            //     tester.position = new Rect(monitor.left, monitor.top, 20, 20);
-            //     tester.monitor = monitor;
+                tester.position = new Rect(monitor.left, monitor.top, 20, 20);
+                tester.monitor = monitor;
 
-            //     // Using ShowPopup() displays the EditorWindow without decorations.
+                // Using ShowPopup() displays the EditorWindow without decorations.
 
-            //     tester.ShowPopup();
-            // }
+                tester.ShowPopup();
+            }
 
             return result;
         }
@@ -460,15 +460,15 @@ namespace Gimbl
             public int height { get { return bottom - top; } }
         }
 
-        // private class MonitorTester : EditorWindow
-        // {
-        //     internal Monitor monitor;
+        private class MonitorTester : EditorWindow
+        {
+            internal Monitor monitor;
 
-        //     private void OnGUI()
-        //     {
-        //         monitor.pixelsPerPoint = EditorGUIUtility.pixelsPerPoint;
-        //         Close();
-        //     }
-        // }
+            private void OnGUI()
+            {
+                monitor.pixelsPerPoint = EditorGUIUtility.pixelsPerPoint;
+                Close();
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using SharpDX;
 using SharpDX.DirectInput;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Gimbl
 {
@@ -16,15 +17,20 @@ namespace Gimbl
         private bool[] testChange;
         public static string[] GetDeviceNames()
         {
-
-            // Get Devices.
-            IList<DeviceInstance> deviceList = new DirectInput().GetDevices(SharpDX.DirectInput.DeviceType.Gamepad, DeviceEnumerationFlags.AllDevices);
-            string[] deviceNames = new string[deviceList.Count+1];
-            deviceNames[0] = "Mouse and Keyboard";
-            for (int i = 0; i < deviceList.Count; i++)
+            string[] deviceNames;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                deviceNames[i+1] = deviceList[i].ProductName;
+                // Get Devices.
+                IList<DeviceInstance> deviceList = new DirectInput().GetDevices(SharpDX.DirectInput.DeviceType.Gamepad, DeviceEnumerationFlags.AllDevices);
+                deviceNames = new string[deviceList.Count+1];
+                deviceNames[0] = "Mouse and Keyboard";
+                for (int i = 0; i < deviceList.Count; i++)
+                {
+                    deviceNames[i+1] = deviceList[i].ProductName;
+                }
+                
             }
+            else{ deviceNames = new string[]{"Mouse and Keyboard"};}
             return deviceNames;
         }
 
