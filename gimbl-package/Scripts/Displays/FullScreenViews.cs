@@ -417,6 +417,7 @@ namespace Gimbl
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
+                Debug.Log("MacOSX detected !");
                 // Use displayplacer to get size of screen and offset.
                 System.Diagnostics.Process p = new System.Diagnostics.Process();
                 p.StartInfo.UseShellExecute = false;
@@ -426,8 +427,13 @@ namespace Gimbl
                 p.Start();
                 string output = p.StandardOutput.ReadToEnd();
                 p.WaitForExit();
+                Debug.Log(string.Format("log: {0}",output));
                 foreach( Match match in Regex.Matches(output, @"Resolution: (\d+)x(\d+)(.|\n)*?Origin: [(](\d+),(\d+)[)]"))
                 {
+                    Debug.Log(string.Format("Found Monitor! {0},{1} - {2},{3}",int.Parse(match.Groups[4].Value),
+                        int.Parse(match.Groups[5].Value), 
+                        int.Parse(match.Groups[1].Value), 
+                        int.Parse(match.Groups[2].Value)));
                     result.Add(new Monitor(int.Parse(match.Groups[4].Value),
                         int.Parse(match.Groups[5].Value), 
                         int.Parse(match.Groups[1].Value), 
