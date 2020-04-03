@@ -22,6 +22,7 @@ using UnityEditor;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 #if PERSIST_AS_RESOURCE
 using System.IO;
@@ -123,7 +124,7 @@ namespace Gimbl
                         int width = (int)(monitor.width / monitor.pixelsPerPoint);
                         int height = (int)(monitor.height / monitor.pixelsPerPoint);
 
-                        window.position = new Rect(x, y, width, height);
+                        window.position = new Rect(x,y,width,height);
                         window.cameraInstanceId = camera.GetInstanceID();
 
                         // Using ShowPopup() eliminates all borders and window decorations.
@@ -398,23 +399,38 @@ namespace Gimbl
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                result.Add(new Monitor(50, 50, 200, 200));
+                // Use xrandr to get size of screen and offset.
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.FileName = "xrandr";
+                p.Start();
+                string output = p.StandardOutput.ReadToEnd();
+                p.WaitForExit();
+                foreach( Match match in Regex.Matches(output, @"(\d+)x(\d+)\+(\d+)\+(\d+)"))
+                {
+                    result.Add(new Monitor(int.Parse(match.Groups[3].Value),
+                                            int.Parse(match.Groups[4].Value), 
+                                            int.Parse(match.Groups[1].Value), 
+                                            int.Parse(match.Groups[2].Value)));
+                }
+                
             }
 
-            foreach (Monitor monitor in result)
-            {
-                MonitorTester tester = EditorWindow.CreateInstance<MonitorTester>();
+            // foreach (Monitor monitor in result)
+            // {
+            //     MonitorTester tester = EditorWindow.CreateInstance<MonitorTester>();
 
-                // These coordinates seem to work, even though they don't have the tricky scaling done when
-                // showing a FullScreenView, above.
+            //     // These coordinates seem to work, even though they don't have the tricky scaling done when
+            //     // showing a FullScreenView, above.
 
-                tester.position = new Rect(monitor.left, monitor.top, 20, 20);
-                tester.monitor = monitor;
+            //     tester.position = new Rect(monitor.left, monitor.top, 20, 20);
+            //     tester.monitor = monitor;
 
-                // Using ShowPopup() displays the EditorWindow without decorations.
+            //     // Using ShowPopup() displays the EditorWindow without decorations.
 
-                tester.ShowPopup();
-            }
+            //     tester.ShowPopup();
+            // }
 
             return result;
         }
@@ -444,15 +460,15 @@ namespace Gimbl
             public int height { get { return bottom - top; } }
         }
 
-        private class MonitorTester : EditorWindow
-        {
-            internal Monitor monitor;
+        // private class MonitorTester : EditorWindow
+        // {
+        //     internal Monitor monitor;
 
-            private void OnGUI()
-            {
-                monitor.pixelsPerPoint = EditorGUIUtility.pixelsPerPoint;
-                Close();
-            }
-        }
+        //     private void OnGUI()
+        //     {
+        //         monitor.pixelsPerPoint = EditorGUIUtility.pixelsPerPoint;
+        //         Close();
+        //     }
+        // }
     }
 }
