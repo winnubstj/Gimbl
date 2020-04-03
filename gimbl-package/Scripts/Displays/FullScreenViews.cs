@@ -422,7 +422,7 @@ namespace Gimbl
                 System.Diagnostics.Process p = new System.Diagnostics.Process();
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.FileName = "displayplacer";
+                p.StartInfo.FileName = "/usr/local/bin/displayplacer";
                 p.StartInfo.Arguments = "list";
                 p.Start();
                 string output = p.StandardOutput.ReadToEnd();
