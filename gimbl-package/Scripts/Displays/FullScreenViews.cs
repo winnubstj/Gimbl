@@ -386,36 +386,58 @@ namespace Gimbl
         static public List<Monitor> EnumeratedMonitors()
         {
             List<Monitor> result = new List<Monitor>();
+            switch (RuntimeInformation.IsOSPlatform)
+            {
+                case OSPlatform.Windows:
+                    EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero,
+                    delegate (IntPtr hMonitor, IntPtr hdc, ref RectApi prect, IntPtr dwData)
+                    {
+                        result.Add(new Monitor(prect.left, prect.top, prect.width, prect.height));
+                        return true;
+                    },
+                    0);
+                    break;
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero,
-                delegate (IntPtr hMonitor, IntPtr hdc, ref RectApi prect, IntPtr dwData)
-                {
-                    result.Add(new Monitor(prect.left, prect.top, prect.width, prect.height));
-                    return true;
-                },
-                0);
-            }
-            else
-            {
-                // Use xrandr to get size of screen and offset.
-                System.Diagnostics.Process p = new System.Diagnostics.Process();
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.FileName = "xrandr";
-                p.Start();
-                string output = p.StandardOutput.ReadToEnd();
-                p.WaitForExit();
-                foreach( Match match in Regex.Matches(output, @"(\d+)x(\d+)\+(\d+)\+(\d+)"))
-                {
-                    result.Add(new Monitor(int.Parse(match.Groups[3].Value),
-                                            int.Parse(match.Groups[4].Value), 
-                                            int.Parse(match.Groups[1].Value), 
-                                            int.Parse(match.Groups[2].Value)));
-                }
+                case OSPlatform.Linux:
+                    // Use xrandr to get size of screen and offset.
+                    System.Diagnostics.Process p = new System.Diagnostics.Process();
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.FileName = "xrandr";
+                    p.Start();
+                    string output = p.StandardOutput.ReadToEnd();
+                    p.WaitForExit();
+                    foreach( Match match in Regex.Matches(output, @"(\d+)x(\d+)\+(\d+)\+(\d+)"))
+                    {
+                        result.Add(new Monitor(int.Parse(match.Groups[3].Value),
+                                                int.Parse(match.Groups[4].Value), 
+                                                int.Parse(match.Groups[1].Value), 
+                                                int.Parse(match.Groups[2].Value)));
+                    }
+                    break;
+                case OSPlatform.OSX:
+                    // Use displayplacer to get size of screen and offset.
+                    System.Diagnostics.Process p = new System.Diagnostics.Process();
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.FileName = "displayplacer";
+                    p.StartInfo.Arguments = "list";
+                    p.Start();
+                    string output = p.StandardOutput.ReadToEnd();
+                    p.WaitForExit();
+                    foreach( Match match in Regex.Matches(output, @"Resolution: (\d+)x(\d+)(.|\n)*?Origin: [(](\d+),(\d+)[)]"))
+                    {
+                        result.Add(new Monitor(int.Parse(match.Groups[4].Value),
+                            int.Parse(match.Groups[5].Value), 
+                            int.Parse(match.Groups[1].Value), 
+                            int.Parse(match.Groups[2].Value)));       
+                    }
+
+                    break;
                 
             }
+
+
 
             foreach (Monitor monitor in result)
             {
