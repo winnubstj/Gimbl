@@ -62,5 +62,6 @@ Distributed under the Janelia Open Source License (https://www.janelia.org/open-
 The Gimbl package integrates dependencies with the following open source licenses.
 
 - M2MQTT (by iot.Eclipse.org, https://github.com/eclipse/paho.mqtt.m2mqtt), licensed under the Eclipse Public License 1.0 (https://github.com/eclipse/paho.mqtt.m2mqtt/blob/master/LICENSE)
+- SharpDX is released under the permissive MIT license, https://github.com/sharpdx/SharpDX/blob/master/LICENSE. Portions Copyright © 2002-2008 Charlie Poole or Copyright © 2002-2004 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov or Copyright © 2000-2002 Philip A. Craig.
 - Path-Creator(by Sebastian Lague, https://www.youtube.com/user/Cercopithecan), licensed under the MIT license (https://github.com/SebLague/Path-Creator/blob/master/LICENSE).
-- 3D Models are from the Poly by Google (https://poly.google.com) and distributed under the CC-BY license (https://support.google.com/poly/answer/7418679) 
+- 3D Models are from Poly by Google (https://poly.google.com) and distributed under the CC-BY license (https://support.google.com/poly/answer/7418679) 
