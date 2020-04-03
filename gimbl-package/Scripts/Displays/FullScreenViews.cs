@@ -386,13 +386,20 @@ namespace Gimbl
         {
             List<Monitor> result = new List<Monitor>();
 
-            EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero,
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero,
                 delegate (IntPtr hMonitor, IntPtr hdc, ref RectApi prect, IntPtr dwData)
                 {
                     result.Add(new Monitor(prect.left, prect.top, prect.width, prect.height));
                     return true;
                 },
                 0);
+            }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                result.Add(new Monitor(50, 50, 200, 200));
+            }
 
             foreach (Monitor monitor in result)
             {
