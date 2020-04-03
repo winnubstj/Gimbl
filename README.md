@@ -9,10 +9,13 @@ A modular and flexible software package for performing VR animal experiments in 
 
 ## Install Instructions
 ### Requirements
-* Right now, this package is Windows only(!) Although Linux/Mac support could be added at a later time.
+* This package has been tested on Windows 7/10 and Ubuntu.
 * Device and external software communication occurs over the MQTT protocol and Gimbl expects access to a MQTT Broker (local or on the network). We have tested the software with the Eclipse Mosquitto broker which can be downloaded [here](https://mosquitto.org/).
+### OS specific notes
+* Ubuntu: Proper fullscreen behavior on the main display requires auto-hiding of the Dock.
 
-Please check out the [Wiki](https://github.com/winnubstj/Gimbl/wiki) for more detailed info.
+### More information
+Please check out the [Wiki](https://github.com/winnubstj/Gimbl/wiki) for more detailed information.
 
 
 ## Quick Start.
