@@ -8,14 +8,24 @@ A modular and flexible software package for performing VR animal experiments in 
 * __Expandable:__ Gimbl is build on top of the powerfull Unity Game engine meaning advanced 3d audio and graphic capabilities are available straight out of the box. Unity has an excellent active user community and many easy-to-follow tutorials are available online.
 
 ## Install Instructions
-### Requirements
-* This package has been tested on Windows 7/10 and Ubuntu.
-* Device and external software communication occurs over the MQTT protocol and Gimbl expects access to a MQTT Broker (local or on the network). We have tested the software with the Eclipse Mosquitto broker which can be downloaded [here](https://mosquitto.org/).
-### OS specific notes
-* Ubuntu: Proper fullscreen behavior on the main display requires auto-hiding of the Dock.
 
-### More information
-Please check out the [Wiki](https://github.com/winnubstj/Gimbl/wiki) for more detailed information.
+### All operating systems
+#### Install mosquitto
+Gimbl requires access to a running MQTT Broker (local or on the network). We have tested the software with the Eclipse Mosquitto broker which can be found [here](https://mosquitto.org/).
+
+### Ubuntu
+Proper automatic display mapping behavior on the main display requires auto-hiding of the Dock.
+
+### Mac OSX
+#### Install displacer
+To install displayplacer run:
+```
+brew tap jakehilborn/jakehilborn && brew install displayplacer
+```
+Currently, correct display mapping only works on the monitor that also displays the unity editor.
+
+## Additional information
+Please check out the [Wiki](https://github.com/winnubstj/Gimbl/wiki) for more detailed info.
 
 
 ## Quick Start.
@@ -62,6 +72,6 @@ Distributed under the Janelia Open Source License (https://www.janelia.org/open-
 The Gimbl package integrates dependencies with the following open source licenses.
 
 - M2MQTT (by iot.Eclipse.org, https://github.com/eclipse/paho.mqtt.m2mqtt), licensed under the Eclipse Public License 1.0 (https://github.com/eclipse/paho.mqtt.m2mqtt/blob/master/LICENSE)
-- SharpDX is released under the permissive MIT license, https://github.com/sharpdx/SharpDX/blob/master/LICENSE. Portions Copyright © 2002-2008 Charlie Poole or Copyright © 2002-2004 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov or Copyright © 2000-2002 Philip A. Craig.
 - Path-Creator(by Sebastian Lague, https://www.youtube.com/user/Cercopithecan), licensed under the MIT license (https://github.com/SebLague/Path-Creator/blob/master/LICENSE).
-- 3D Models are from Poly by Google (https://poly.google.com) and distributed under the CC-BY license (https://support.google.com/poly/answer/7418679) 
+- SharpDX is released under the permissive MIT license, https://github.com/sharpdx/SharpDX/blob/master/LICENSE. Portions Copyright © 2002-2008 Charlie Poole or Copyright © 2002-2004 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov or Copyright © 2000-2002 Philip A. Craig.
+- 3D Models are from the Poly by Google (https://poly.google.com) and distributed under the CC-BY license (https://support.google.com/poly/answer/7418679) 
