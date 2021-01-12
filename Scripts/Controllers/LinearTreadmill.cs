@@ -209,7 +209,7 @@ namespace Gimbl
 
         public void OnMessageSpherical(SphericalTreadmill.MSG msg)
         {
-            lock (movement) { movement.Add(-msg.pitch, 0, 0); }
+            lock (movement) { movement.Add(msg.pitch, 0, 0); }
         }
 
         public override void LinkSettings(string assetPath = "")
