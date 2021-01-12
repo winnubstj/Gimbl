@@ -210,6 +210,7 @@ public class MainWindow : EditorWindow
                     break;
                 case "Logger":
                     _logger = obj.GetComponent<Gimbl.LoggerObject>();
+                    _logger.settings = (LoggerSettings)AssetDatabase.LoadAssetAtPath("Assets/VRSettings/LoggerSettings.asset", typeof(LoggerSettings));
                     obj.hideFlags = HideFlags.HideInHierarchy;
                     break;
                 case "Actors":
