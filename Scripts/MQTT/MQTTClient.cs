@@ -84,6 +84,8 @@ namespace Gimbl
         }
         void OnApplicationQuit()
         {
+            // Send stop
+            if (requestStop == false) { stopChannel.Send(); }
             // Unsubscribe from all topics.
             if (channelList.Count>0) client.Unsubscribe(channelList.Select(x => x.topic).ToArray());
             // Clear channel list.
