@@ -18,6 +18,10 @@ namespace PathCreation
         [SerializeField]
         bool vertexPathUpToDate;
 
+        // UI position calculator values.
+        public float pathDist = 0f;
+        public Vector3 pathWorld = new Vector3();
+
         // vertex path settings
         public float vertexPathMaxAngleError = .3f;
         public float vertexPathMinVertexSpacing = 0.01f;

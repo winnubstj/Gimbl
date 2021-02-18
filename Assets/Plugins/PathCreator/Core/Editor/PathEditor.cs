@@ -105,8 +105,18 @@ namespace PathCreationEditor {
 
         void DrawBezierPathInspector () {
             using (var check = new EditorGUI.ChangeCheckScope ()) {
-                // Path options:
-                data.showPathOptions = EditorGUILayout.Foldout (data.showPathOptions, new GUIContent ("Bézier Path Options"), true, boldFoldoutStyle);
+                EditorGUILayout.HelpBox("Path calculation functions.", MessageType.Info);
+                // Path distance to position
+                data.pathDist = EditorGUILayout.FloatField("Path Distance", data.pathDist);
+                if (GUILayout.Button("Get World Coordinates"))
+                {
+                    Vector3 pos = creator.path.GetPointAtDistance(data.pathDist);
+                    Vector3 rots = creator.path.GetRotationAtDistance(data.pathDist).eulerAngles;
+                    Debug.Log($" Pos X: {pos.x:.000}, Pos Y: {pos.y:.000}, Pos Z: {pos.z:.000}, Rot X: {rots.x:.000}, Rot Y: {rots.y:.000}, Rot Z: {rots.z:.000}");
+
+                }
+                    // Path options:
+                    data.showPathOptions = EditorGUILayout.Foldout (data.showPathOptions, new GUIContent ("Bézier Path Options"), true, boldFoldoutStyle);
                 if (data.showPathOptions) {
                     bezierPath.Space = (PathSpace) EditorGUILayout.Popup ("Space", (int) bezierPath.Space, spaceNames);
                     bezierPath.ControlPointMode = (BezierPath.ControlMode) EditorGUILayout.EnumPopup (new GUIContent ("Control Mode"), bezierPath.ControlPointMode);
