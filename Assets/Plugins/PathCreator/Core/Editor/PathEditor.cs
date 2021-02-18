@@ -112,8 +112,14 @@ namespace PathCreationEditor {
                 {
                     Vector3 pos = creator.path.GetPointAtDistance(data.pathDist);
                     Vector3 rots = creator.path.GetRotationAtDistance(data.pathDist).eulerAngles;
-                    Debug.Log($" Pos X: {pos.x:.000}, Pos Y: {pos.y:.000}, Pos Z: {pos.z:.000}, Rot X: {rots.x:.000}, Rot Y: {rots.y:.000}, Rot Z: {rots.z:.000}");
-
+                    Debug.Log($"World - Pos X: {pos.x:.000}, Pos Y: {pos.y:.000}, Pos Z: {pos.z:.000}, Rot X: {rots.x:.000}, Rot Y: {rots.y:.000}, Rot Z: {rots.z:.000}");
+                }
+                data.pathWorld = EditorGUILayout.Vector3Field("World Position", data.pathWorld);
+                if (GUILayout.Button("Get Path Position"))
+                {
+                    float pos = creator.path.GetClosestDistanceAlongPath(data.pathWorld);
+                    Vector3 rots = creator.path.GetRotationAtDistance(pos).eulerAngles;
+                    Debug.Log($"Path - Path Distance: {pos:.000}, Rot X: {rots.x:.000}, Rot Y: {rots.y:.000}, Rot Z: {rots.z:.000}");
                 }
                     // Path options:
                     data.showPathOptions = EditorGUILayout.Foldout (data.showPathOptions, new GUIContent ("Bézier Path Options"), true, boldFoldoutStyle);
