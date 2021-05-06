@@ -26,35 +26,43 @@ namespace Gimbl
             if (!isFading)
             {
                 isFading = true;
-                if (disp.currentBrightness <= 0) { disp.currentBrightness = 1; }
-                int sleepTime = (int)(duration / (disp.currentBrightness));
-                await Task.Run(() =>
+                // Only run if fade out is really required.
+                if (disp.currentBrightness > 0)
                 {
-                    for (float brightness = disp.currentBrightness; brightness >= 0; brightness--)
+                    int sleepTime = (int)(duration / (disp.currentBrightness));
+                    await Task.Run(() =>
                     {
-                        Thread.Sleep(sleepTime);
-                        disp.currentBrightness = brightness;
-                    }
-                });
+                        for (float brightness = disp.currentBrightness; brightness >= 0; brightness--)
+                        {
+                            Thread.Sleep(sleepTime);
+                            disp.currentBrightness = brightness;
+                        }
+                    });
+                }
+                disp.currentBrightness = 0; // ensures expected brightness settings.
                 isFading = false;
             }
         }
 
-        public async Task FadeIn(DisplayObject disp,float duration)
+        public async Task FadeIn(DisplayObject disp, float duration)
         {
             if (!isFading) // Prevents two fading actions.
             {
                 isFading = true;
-                if (disp.currentBrightness <= 0) { disp.currentBrightness = 1; }
-                int sleepTime = (int)(duration / (disp.settings.brightness - disp.currentBrightness));
-                await Task.Run(() =>
+                // Only run if fade in is really required.
+                if (disp.currentBrightness < disp.settings.brightness)
                 {
-                    for (float brightness = disp.currentBrightness; brightness <= disp.settings.brightness; brightness++)
+                    int sleepTime = (int)(duration / (disp.settings.brightness - disp.currentBrightness));
+                    await Task.Run(() =>
                     {
-                        Thread.Sleep(sleepTime);
-                        disp.currentBrightness = brightness;
-                    }
-                });
+                        for (float brightness = disp.currentBrightness; brightness <= disp.settings.brightness; brightness++)
+                        {
+                            Thread.Sleep(sleepTime);
+                            disp.currentBrightness = brightness;
+                        }
+                    });
+                }
+                disp.currentBrightness = disp.settings.brightness; // ensures expected brightness settings.
                 isFading = false;
             }
         }
