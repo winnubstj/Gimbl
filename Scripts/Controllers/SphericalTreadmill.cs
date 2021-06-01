@@ -97,32 +97,57 @@ namespace Gimbl
                     if (moveArcLengths.z > 0) { moveArcLengths.z *= settings.gain.backward; }
                     else { moveArcLengths.z *= settings.gain.forward; }
 
-                    float speed = Mathf.Sqrt(Mathf.Pow(moveArcLengths.x, 2) + Mathf.Pow(moveArcLengths.z, 2)) / Time.deltaTime;
-
-                    // Yaw and Trajectory based heading.
-                    #region Yaw and Trajectory based heading.
-
-                    // Trajectory heading.
-                    moveHeading.y = moveArcLengths.y; // default.
-                    if (speed > settings.trajectoryHeading.minSpeed)
+                    // If on path.
+                    if (path != null)
                     {
-                        float angle = Mathf.Atan(moveArcLengths.x / moveArcLengths.z) * Mathf.Rad2Deg; // angle between -90 to 90 degrees based on movement vector.
-                        // Edge cases (assume forward movement)
-                        if (angle == 90 || angle==-90) { angle *= -1; }
-                        // convert to scale factor
-                        float rotFactor = angle / 90f; // 90 degrees is maximum rotation per second.
-                        // convert to rotation 
-                        moveHeading.y += rotFactor * (settings.trajectoryHeading.maxRotPerSec * Time.deltaTime);
+                        float currentDist = path.path.GetClosestDistanceAlongPath(Actor.transform.position); // more dynamic.
+                        float newDist = -moveArcLengths.z + currentDist;
+                        // set path looping.
+                        PathCreation.EndOfPathInstruction endofPath;
+                        if (settings.loopPath) endofPath = PathCreation.EndOfPathInstruction.Loop;
+                        else { endofPath = PathCreation.EndOfPathInstruction.Stop; }
+                        // calculate position and heading.
+                        Vector3 pos = path.path.GetPointAtDistance(newDist, endofPath);
+                        Vector3 pathRot = path.path.GetRotationAtDistance(newDist, endofPath).eulerAngles;
+                        pathRot[2] = 0;
+                        //update position.
+                        if (Actor.isActive)
+                        {
+                            Actor.transform.position = pos;
+                            Actor.transform.rotation = Quaternion.Euler(pathRot);
+                        }
+
                     }
-                    #endregion
-                    // Apply translation in opposite direction according to heading.
-                    if (Actor.isActive)
+                    // if freely moving
+                    else
                     {
-                        //Heading.
-                        Actor.transform.Rotate(moveHeading, Space.Self);
-                        //Translation.
-                        moveArcLengths.x *= -1; moveArcLengths.y = 0; moveArcLengths.z *= -1;
-                        Actor.transform.Translate(moveArcLengths, Space.Self);
+                        float speed = Mathf.Sqrt(Mathf.Pow(moveArcLengths.x, 2) + Mathf.Pow(moveArcLengths.z, 2)) / Time.deltaTime;
+
+                        // Yaw and Trajectory based heading.
+                        #region Yaw and Trajectory based heading.
+
+                        // Trajectory heading.
+                        moveHeading.y = moveArcLengths.y; // default.
+                        if (speed > settings.trajectoryHeading.minSpeed)
+                        {
+                            float angle = Mathf.Atan(moveArcLengths.x / moveArcLengths.z) * Mathf.Rad2Deg; // angle between -90 to 90 degrees based on movement vector.
+                                                                                                           // Edge cases (assume forward movement)
+                            if (angle == 90 || angle == -90) { angle *= -1; }
+                            // convert to scale factor
+                            float rotFactor = angle / 90f; // 90 degrees is maximum rotation per second.
+                                                           // convert to rotation 
+                            moveHeading.y += rotFactor * (settings.trajectoryHeading.maxRotPerSec * Time.deltaTime);
+                        }
+                        #endregion
+                        // Apply translation in opposite direction according to heading.
+                        if (Actor.isActive)
+                        {
+                            //Heading.
+                            Actor.transform.Rotate(moveHeading, Space.Self);
+                            //Translation.
+                            moveArcLengths.x *= -1; moveArcLengths.y = 0; moveArcLengths.z *= -1;
+                            Actor.transform.Translate(moveArcLengths, Space.Self);
+                        }
                     }
                 }
             }
