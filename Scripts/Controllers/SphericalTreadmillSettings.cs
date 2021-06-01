@@ -17,6 +17,7 @@ namespace Gimbl
         public TracjectorySettings trajectoryHeading;
         public string[] buttonTopics;
         public GamepadSettings gamepadSettings;
+        public bool loopPath;
     }
     [System.Serializable]
     public class SphericalGain
@@ -33,7 +34,7 @@ namespace Gimbl
     [System.Serializable]
     public class TracjectorySettings
     {
-        public int contribution = 0; // in percentage.
+        public float gain = 1;
         public float minSpeed = 0.1f; //units per second.
         public AnimationCurve trajectoryCurve = new AnimationCurve(new Keyframe(0, -60), new Keyframe(2.5f, -30,30,30), new Keyframe(5, 0));
     }

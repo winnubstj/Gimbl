@@ -15,7 +15,8 @@ namespace Gimbl
         private Vector3 moveArcLengths = new Vector3();
         private Vector3 moveHeading = new Vector3();
         private ActorObject prevActor;
-        private CharacterController ActorCharController;
+        [SerializeField]
+        public PathCreation.PathCreator path;
 
         // Messaging Variables.
         public LoggerObject logger;
@@ -80,7 +81,7 @@ namespace Gimbl
                     if (prevActor != Actor)
                     {
                         prevActor = Actor;
-                        ActorCharController = Actor.GetComponent<CharacterController>();
+                        //ActorCharController = Actor.GetComponent<CharacterController>();
                     }
                     // Smooth input buffer.
                     #region Smooth input.
@@ -107,10 +108,11 @@ namespace Gimbl
 
                     // Trajectory heading.
                     moveHeading.y = moveArcLengths.y; // default.
-                    if (settings.trajectoryHeading.contribution > 0)
+                    if (settings.trajectoryHeading.gain > 0)
                     {
                         float trajectoryHeading = 0;
                         float xFraction = moveArcLengths.z / moveArcLengths.x; // pitch / roll
+                        Debug.Log(xFraction);
                         if (xFraction > 20) { xFraction = 20; }
                         if (xFraction < -20) { xFraction = -20; }
                         if (!float.IsNaN(xFraction) & speed > settings.trajectoryHeading.minSpeed)
@@ -120,10 +122,8 @@ namespace Gimbl
                             if (moveArcLengths.x > 0) trajectoryHeading *= -1; // larger then zero because it is from ball perspective.
                         }
 
-                        // Combine according to proportion.
-                        float trajProp = (float)settings.trajectoryHeading.contribution / 100f;
-                        moveHeading.y = -((trajectoryHeading * trajProp) +
-                                (moveArcLengths.y * (1f - trajProp)));
+                        // Combine according to gain.
+                        moveHeading.y += trajectoryHeading * settings.trajectoryHeading.gain;
                     }
                     #endregion
                     // Apply translation in opposite direction according to heading.
@@ -138,8 +138,7 @@ namespace Gimbl
                         }
                         //Translation.
                         moveArcLengths.x *= -1; moveArcLengths.y = 0; moveArcLengths.z *= -1;
-                        ActorCharController.Move(Actor.transform.TransformVector(
-                            moveArcLengths));
+                        Actor.transform.Translate(moveArcLengths, Space.Self); // Changed.
                     }
                 }
             }
@@ -221,8 +220,12 @@ namespace Gimbl
             EditorGUILayout.BeginHorizontal(LayoutSettings.editFieldOp); EditorGUILayout.PropertyField(serializedObject.FindProperty("inputSmooth"), new GUIContent("Input Smoothing")); EditorGUILayout.LabelField("(ms)", GUILayout.Width(70)); EditorGUILayout.EndHorizontal();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("trajectoryHeading"), true, LayoutSettings.editFieldOp);
             EditorGUI.indentLevel--;
-
-
+            EditorGUILayout.LabelField("Path Settings", EditorStyles.boldLabel);
+            Undo.RecordObject(this, "Change Controller Path");
+            EditorGUI.indentLevel++;
+            path = (PathCreation.PathCreator)EditorGUILayout.ObjectField("Selected Path", path, typeof(PathCreation.PathCreator), true, LayoutSettings.editFieldOp);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("loopPath"), true, LayoutSettings.editFieldOp);
+            EditorGUI.indentLevel--;
             serializedObject.ApplyModifiedProperties();
         }
     }
