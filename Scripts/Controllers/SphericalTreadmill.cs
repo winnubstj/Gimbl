@@ -121,18 +121,14 @@ namespace Gimbl
                     // if freely moving
                     else
                     {
+                        moveHeading.y = moveArcLengths.y;
+                        // Trajectory based heading.
+                        #region Trajectory based heading.
                         float speed = Mathf.Sqrt(Mathf.Pow(moveArcLengths.x, 2) + Mathf.Pow(moveArcLengths.z, 2)) / Time.deltaTime;
-
-                        // Yaw and Trajectory based heading.
-                        #region Yaw and Trajectory based heading.
-
-                        // Trajectory heading.
-                        moveHeading.y = moveArcLengths.y; // default.
                         if (speed > settings.trajectoryHeading.minSpeed)
                         {
-                            float angle = Mathf.Atan(moveArcLengths.x / moveArcLengths.z) * Mathf.Rad2Deg; // angle between -90 to 90 degrees based on movement vector.
-                                                                                                           // Edge cases (assume forward movement)
-                            if (angle == 90 || angle == -90) { angle *= -1; }
+                            float angle = Mathf.Atan(moveArcLengths.x / moveArcLengths.z) * Mathf.Rad2Deg; // angle between -90 to 90 degrees based on movement vector.                                                                                    
+                            if (angle == 90 || angle == -90) { angle *= -1; }// Edge cases (assume forward movement)
                             // convert to scale factor
                             float rotFactor = angle / 90f; // 90 degrees is maximum rotation per second.
                                                            // convert to rotation 
