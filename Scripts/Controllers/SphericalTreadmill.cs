@@ -100,7 +100,7 @@ namespace Gimbl
                     // If on path.
                     if (path != null)
                     {
-                        float currentDist = path.path.GetClosestDistanceAlongPath(Actor.transform.position); // more dynamic.
+                        float currentDist = path.path.GetClosestDistanceAlongPath(Actor.transform.position); 
                         float newDist = -moveArcLengths.z + currentDist;
                         // set path looping.
                         PathCreation.EndOfPathInstruction endofPath;
