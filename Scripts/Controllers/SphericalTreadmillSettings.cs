@@ -34,9 +34,8 @@ namespace Gimbl
     [System.Serializable]
     public class TracjectorySettings
     {
-        public float gain = 1;
+        public float maxRotPerSec = 90;
         public float minSpeed = 0.1f; //units per second.
-        public AnimationCurve trajectoryCurve = new AnimationCurve(new Keyframe(0, -60), new Keyframe(2.5f, -30,30,30), new Keyframe(5, 0));
     }
 
 }

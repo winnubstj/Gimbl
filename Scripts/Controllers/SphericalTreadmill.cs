@@ -108,22 +108,15 @@ namespace Gimbl
 
                     // Trajectory heading.
                     moveHeading.y = moveArcLengths.y; // default.
-                    if (settings.trajectoryHeading.gain > 0)
+                    if (speed > settings.trajectoryHeading.minSpeed)
                     {
-                        float trajectoryHeading = 0;
-                        float xFraction = moveArcLengths.z / moveArcLengths.x; // pitch / roll
-                        Debug.Log(xFraction);
-                        if (xFraction > 20) { xFraction = 20; }
-                        if (xFraction < -20) { xFraction = -20; }
-                        if (!float.IsNaN(xFraction) & speed > settings.trajectoryHeading.minSpeed)
-                        {
-                            trajectoryHeading = settings.trajectoryHeading.trajectoryCurve.Evaluate(Mathf.Abs(xFraction));
-                            trajectoryHeading *= Time.fixedDeltaTime;
-                            if (moveArcLengths.x > 0) trajectoryHeading *= -1; // larger then zero because it is from ball perspective.
-                        }
-
-                        // Combine according to gain.
-                        moveHeading.y += trajectoryHeading * settings.trajectoryHeading.gain;
+                        float angle = Mathf.Atan(moveArcLengths.x / moveArcLengths.z) * Mathf.Rad2Deg;
+                        // Edge cases (assume forward movement)
+                        if (angle == 90 || angle==-90) { angle *= -1; }
+                        // convert to scale factor
+                        float rotFactor = angle / 90f;
+                        // convert to rotation 
+                        moveHeading.y += rotFactor * (settings.trajectoryHeading.maxRotPerSec * Time.deltaTime);
                     }
                     #endregion
                     // Apply translation in opposite direction according to heading.
