@@ -78,11 +78,7 @@ namespace Gimbl
                 if (Actor != null)
                 {
                     // Check if actor changed.
-                    if (prevActor != Actor)
-                    {
-                        prevActor = Actor;
-                        //ActorCharController = Actor.GetComponent<CharacterController>();
-                    }
+                    if (prevActor != Actor) { prevActor = Actor;}
                     // Smooth input buffer.
                     #region Smooth input.
                     if(GetBufferSize(settings.inputSmooth) != smoothBuffer.bufferSize)
@@ -101,7 +97,7 @@ namespace Gimbl
                     if (moveArcLengths.z > 0) { moveArcLengths.z *= settings.gain.backward; }
                     else { moveArcLengths.z *= settings.gain.forward; }
 
-                    float speed = Mathf.Sqrt(Mathf.Pow(moveArcLengths.x, 2) + Mathf.Pow(moveArcLengths.z, 2)) / Time.fixedDeltaTime;
+                    float speed = Mathf.Sqrt(Mathf.Pow(moveArcLengths.x, 2) + Mathf.Pow(moveArcLengths.z, 2)) / Time.deltaTime;
 
                     // Yaw and Trajectory based heading.
                     #region Yaw and Trajectory based heading.
@@ -110,11 +106,11 @@ namespace Gimbl
                     moveHeading.y = moveArcLengths.y; // default.
                     if (speed > settings.trajectoryHeading.minSpeed)
                     {
-                        float angle = Mathf.Atan(moveArcLengths.x / moveArcLengths.z) * Mathf.Rad2Deg;
+                        float angle = Mathf.Atan(moveArcLengths.x / moveArcLengths.z) * Mathf.Rad2Deg; // angle between -90 to 90 degrees based on movement vector.
                         // Edge cases (assume forward movement)
                         if (angle == 90 || angle==-90) { angle *= -1; }
                         // convert to scale factor
-                        float rotFactor = angle / 90f;
+                        float rotFactor = angle / 90f; // 90 degrees is maximum rotation per second.
                         // convert to rotation 
                         moveHeading.y += rotFactor * (settings.trajectoryHeading.maxRotPerSec * Time.deltaTime);
                     }
@@ -123,15 +119,10 @@ namespace Gimbl
                     if (Actor.isActive)
                     {
                         //Heading.
-                        if (!float.IsNaN(moveHeading.y))
-                        {
-                            Actor.transform.Rotate(moveHeading, Space.Self);
-                            // fix rotation of camera.
-                            if (settings.lockCameraRotation && Actor.display!=null){ Actor.display.transform.Rotate(-moveHeading, Space.Self); }
-                        }
+                        Actor.transform.Rotate(moveHeading, Space.Self);
                         //Translation.
                         moveArcLengths.x *= -1; moveArcLengths.y = 0; moveArcLengths.z *= -1;
-                        Actor.transform.Translate(moveArcLengths, Space.Self); // Changed.
+                        Actor.transform.Translate(moveArcLengths, Space.Self);
                     }
                 }
             }
@@ -208,7 +199,6 @@ namespace Gimbl
             }
             EditorGUILayout.LabelField("Movement Settings", EditorStyles.boldLabel);
             EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("lockCameraRotation"), new GUIContent("Fix Camera Rotation"), true, LayoutSettings.editFieldOp);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("gain"), true, LayoutSettings.editFieldOp);
             EditorGUILayout.BeginHorizontal(LayoutSettings.editFieldOp); EditorGUILayout.PropertyField(serializedObject.FindProperty("inputSmooth"), new GUIContent("Input Smoothing")); EditorGUILayout.LabelField("(ms)", GUILayout.Width(70)); EditorGUILayout.EndHorizontal();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("trajectoryHeading"), true, LayoutSettings.editFieldOp);

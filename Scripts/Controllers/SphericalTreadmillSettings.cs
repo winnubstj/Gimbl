@@ -11,7 +11,6 @@ namespace Gimbl
         public bool isActive = true;
         public bool enableLogging = false;
         public int inputSmooth = 100;
-        public bool lockCameraRotation = false;
         public SphericalGain gain = new SphericalGain();
         public Vector3 inputGain = new Vector3() { x=1, y=1, z=1 };
         public TracjectorySettings trajectoryHeading;
