@@ -34,6 +34,7 @@ namespace Gimbl
     public class TracjectorySettings
     {
         public float maxRotPerSec = 90;
+        public float angleOffset = 0f;
         public float minSpeed = 0.1f; //units per second.
     }
 

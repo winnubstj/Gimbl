@@ -128,6 +128,10 @@ namespace Gimbl
                         {
                             float angle = Mathf.Atan(moveArcLengths.x / moveArcLengths.z) * Mathf.Rad2Deg; // angle between -90 to 90 degrees based on movement vector.                                                                                    
                             if (angle == 90 || angle == -90) { angle *= -1; } // Edge cases (assume forward movement)
+                            // Add angle offset
+                            angle += settings.trajectoryHeading.angleOffset;
+                            if (angle > 90) { angle = 90; }
+                            if (angle < -90) { angle = -90; }
                             // convert to scale factor
                             float rotFactor = angle / 90f; // 90 degrees is maximum rotation per second.
                                                            // convert to rotation 
