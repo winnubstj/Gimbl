@@ -15,6 +15,7 @@ namespace Gimbl
         private Vector3 moveArcLengths = new Vector3();
         private Vector3 moveHeading = new Vector3();
         private ActorObject prevActor;
+        private CharacterController ActorCharController;
         [SerializeField]
         public PathCreation.PathCreator path;
 
@@ -78,7 +79,7 @@ namespace Gimbl
                 if (Actor != null)
                 {
                     // Check if actor changed.
-                    if (prevActor != Actor) { prevActor = Actor;}
+                    if (prevActor != Actor) { prevActor = Actor; ActorCharController = Actor.GetComponent<CharacterController>(); }
                     // Smooth input buffer.
                     #region Smooth input.
                     if(GetBufferSize(settings.inputSmooth) != smoothBuffer.bufferSize)
@@ -145,7 +146,8 @@ namespace Gimbl
                             Actor.transform.Rotate(moveHeading, Space.Self);
                             //Translation.
                             moveArcLengths.x *= -1; moveArcLengths.y = 0; moveArcLengths.z *= -1;
-                            Actor.transform.Translate(moveArcLengths, Space.Self);
+                            ActorCharController.Move(Actor.transform.TransformVector(
+                            moveArcLengths));
                         }
                     }
                 }
