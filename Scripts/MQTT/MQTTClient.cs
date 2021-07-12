@@ -40,9 +40,6 @@ namespace Gimbl
             ip = UnityEditor.EditorPrefs.GetString("JaneliaVR_MQTT_IP");
             port = UnityEditor.EditorPrefs.GetInt("JaneliaVR_MQTT_Port");
             sendFrame = UnityEditor.EditorPrefs.GetBool("Gimbl_sendFrameMsg");
-            // Set VSync.
-            Application.targetFrameRate = Screen.currentResolution.refreshRate;
-            QualitySettings.vSyncCount = 1;
             // Subscribe to some standard output channels.
             frameChannel = new MQTTChannel("Gimbl/Frame", false);
             startChannel = new MQTTChannel("Gimbl/Session/Start", false);
