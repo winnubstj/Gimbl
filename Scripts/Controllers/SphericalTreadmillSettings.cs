@@ -27,6 +27,11 @@ namespace Gimbl
         public float strafeRight = 1;
         public float turnLeft = 1;
         public float turnRight = 1;
+        public bool Equals(SphericalGain other)
+        {
+            return this.forward == other.forward & this.backward == other.backward & this.strafeLeft == other.strafeLeft &
+                this.strafeRight == other.strafeRight & this.turnLeft == other.turnLeft & this.turnRight == other.turnRight;
+        }
     }
 
 
@@ -36,6 +41,10 @@ namespace Gimbl
         public float maxRotPerSec = 90;
         public float angleOffsetBias = 0f;
         public float minSpeed = 0.1f; //units per second.
+        public bool Equals(TracjectorySettings other)
+        {
+            return this.maxRotPerSec == other.maxRotPerSec & this.angleOffsetBias == other.angleOffsetBias & this.minSpeed == other.minSpeed;
+        }
     }
 
 }

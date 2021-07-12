@@ -41,10 +41,20 @@ namespace Gimbl
             public int pitch;
         }
         SphericalControllerMsg sphericalControllerMsg = new SphericalControllerMsg();
-
+        public class KeySphericalSettings
+        {
+            public string name;
+            public bool isActive;
+            public SphericalGain gain = new SphericalGain();
+            public TracjectorySettings trajectory = new TracjectorySettings();
+            public int inputSmooth;
+            public bool loopPath;
+        }
+        public KeySphericalSettings logSettings;
         public void Update()
         {
             ProcessMovement();
+            CheckSphericalSettings();
         }
 
         public void ProcessMovement()
@@ -165,8 +175,38 @@ namespace Gimbl
             statusChannel.Send(new StatusMsg() { status = true });
             // Create smooth buffer
             smoothBuffer = new ValueBuffer(GetBufferSize(settings.inputSmooth),true);
+            // Setup tracking of settings changes.
+            logSettings = new KeySphericalSettings();
+            LogSphericalSettings();
         }
 
+        public void LogSphericalSettings()
+        {
+            logSettings.name = name;
+            logSettings.isActive = settings.isActive;
+            logSettings.gain.forward = settings.gain.forward;
+            logSettings.gain.backward = settings.gain.backward;
+            logSettings.gain.strafeLeft = settings.gain.strafeLeft;
+            logSettings.gain.strafeRight = settings.gain.strafeRight;
+            logSettings.gain.turnLeft = settings.gain.turnLeft;
+            logSettings.gain.turnRight = settings.gain.turnRight;
+            logSettings.trajectory.angleOffsetBias = settings.trajectoryHeading.angleOffsetBias;
+            logSettings.trajectory.maxRotPerSec = settings.trajectoryHeading.maxRotPerSec;
+            logSettings.trajectory.minSpeed = settings.trajectoryHeading.minSpeed;
+            logSettings.inputSmooth = settings.inputSmooth;
+            logSettings.loopPath = settings.loopPath;
+            logger.logFile.Log<KeySphericalSettings>("Spherical Controller Settings", logSettings);
+        }
+
+        public void CheckSphericalSettings()
+        {
+            if (logSettings.name!=name || logSettings.isActive != settings.isActive || logSettings.gain.Equals(settings.gain)==false ||
+                logSettings.trajectory.Equals(settings.trajectoryHeading)==false || logSettings.inputSmooth!=settings.inputSmooth ||
+                 logSettings.loopPath!=settings.loopPath)
+            {
+                LogSphericalSettings();
+            }
+        }
         public void OnMessage(MSG msg)
         {
             // ordered by influence on movement axis in unity.(roll/x: side-to-side, yaw/y: turn, pitch/z: forwards-backwards)

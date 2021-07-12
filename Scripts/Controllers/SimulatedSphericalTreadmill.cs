@@ -27,12 +27,16 @@ namespace Gimbl
             stopwatch.Start();
             // Create smooth buffer
             smoothBuffer = new ValueBuffer(GetBufferSize(settings.inputSmooth),true);
+            // Setup tracking of settings changes.
+            logSettings = new KeySphericalSettings();
+            LogSphericalSettings();
         }
 
         public new void Update()
         {
             GetSimulatedInput();
             ProcessMovement();
+            CheckSphericalSettings();
         }
         // Update is called once per frame
         private void GetSimulatedInput()
