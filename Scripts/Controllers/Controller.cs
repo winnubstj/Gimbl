@@ -117,7 +117,7 @@ namespace Gimbl
             if (outputFile.Length == 0) return;
             UnityEditor.AssetDatabase.SaveAssets();
             string sourcePath = System.IO.Path.Combine(Application.dataPath, string.Format("VRSettings/Controllers/{0}.asset", controller.name));
-            UnityEditor.FileUtil.CopyFileOrDirectory(sourcePath, outputFile);
+            UnityEditor.FileUtil.ReplaceFile(sourcePath, outputFile);
         }
 
         public void LoadController()
