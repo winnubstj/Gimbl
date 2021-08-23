@@ -31,7 +31,7 @@ Please check out the [Wiki](https://github.com/winnubstj/Gimbl/wiki) for more de
 ## Quick Start.
 This guide takes you through all the basic steps of setting up a VR task for the first time. We will then import a simple infinite corridor task where the animal has to report a fixed location on a 1d track. It will also explain how to simulate a input from a external sensor.
 
-<img src="./.docs/images/QuickStart/ScreenShot.png" width="300" height="210"> <img src="./.docs/images/QuickStart/ScreenShot2.png" width="300" height="210">
+<img src=".docs/images/QuickStart/ScreenShot.png" width="300" height="210"> <img src="./.docs/images/QuickStart/ScreenShot2.png" width="300" height="210">
 
 ### Import Gimbl into Unity
 * Create new unity project (make sure to delete any camera in the scene).
