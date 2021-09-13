@@ -43,7 +43,7 @@ namespace Gimbl
                 buttonPresses[1] = Input.GetButtonDown("Fire2");
                 buttonPresses[2] = Input.GetButtonDown("Fire3");
                 buttonPresses[3] = Input.GetButtonDown("Jump");
-                gamepad.SendChannels(buttonPresses);
+                if (this.Actor !=null) { gamepad.SendChannels(buttonPresses);  }
             }
             //Gamepad.
             else
@@ -53,7 +53,7 @@ namespace Gimbl
                 if (Mathf.Abs(moveControl) < 0.075) moveControl = 0;
                 moveControl *= 0.05f;
                 // Check button that have changed to On.
-                gamepad.SendChannels(gamepad.checkButtonChange(state));
+                if (this.Actor != null) { gamepad.SendChannels(gamepad.checkButtonChange(state)); }
             }
             stopwatch.Restart();
             movement.Add(moveControl, 0, 0);
