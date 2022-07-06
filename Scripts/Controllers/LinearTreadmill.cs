@@ -4,6 +4,7 @@ using UnityEngine;
 using Gimbl;
 using System.Linq;
 using UnityEditor;
+using System;
 namespace Gimbl
 {
     public class LinearTreadmill : Gimbl.ControllerObject
@@ -159,7 +160,7 @@ namespace Gimbl
                 #region With Path
                 else
                 {
-                    float currentDist = path.path.GetClosestDistanceAlongPath(pos); // more dynamic.
+                    float currentDist =  (float)Math.Round((double)path.path.GetClosestDistanceAlongPath(pos),3); // more dynamic, round to 3 decimal points (<mm) so that you dont get slow movement due to float point rounding.
                     float newDist = moved + currentDist;
                     // set path looping.
                     if (settings.loopPath) endofPath = PathCreation.EndOfPathInstruction.Loop;
