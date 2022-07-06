@@ -76,6 +76,10 @@ namespace Gimbl
                         movement.Clear();
                     }
                 }
+                else
+                {
+                    moveArcLengths.x = 0; moveArcLengths.y = 0; moveArcLengths.z = 0; // no new movement if buffer is empty.
+                }
                 // log.
                 if (settings.enableLogging)
                 {
