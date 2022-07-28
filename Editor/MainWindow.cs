@@ -40,22 +40,13 @@ public class MainWindow : EditorWindow
     [MenuItem("Window/Gimbl")]
     public static void ShowWindow()
     {
+        /// Creates the EditorWindow, if it does not yet exists, and docks it next to the inspector.
         if (window == null)
         {
-            window = GetWindow<MainWindow>(" Settings", true );
-            Texture2D tex = Resources.Load("Icons/mouse", typeof(Texture2D)) as Texture2D;
-            window.titleContent.image = tex;
-            Rect pos = window.position;
-            pos.x = Screen.currentResolution.width * 0.75f;
-            pos.y = Screen.currentResolution.height * 0.5f;
-            pos.width = 385;
-            pos.height = 520;
-            window.position = pos;
-            // Call tab windows.
+            System.Type inspectorType = System.Type.GetType("UnityEditor.InspectorWindow,UnityEditor.dll");
+            EditorWindow window = MainWindow.GetWindow<MainWindow>("Settings", new System.Type[] { inspectorType });
             ActorWindow.ShowWindow();
             DisplaysWindow.ShowWindow();
-            // Refocus to main.
-            window.Focus();
         }
     }
     private void OnEnable()
